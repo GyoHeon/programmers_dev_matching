@@ -1,17 +1,24 @@
 import { searchLanguages } from "./api.js";
 
 const form = document.querySelector(".SearchInput");
-const input = document.querySelector(".SearchInput_input");
+const input = document.querySelector(".SearchInput__input");
 
-const arrow = [ArrowDown, ArrowUp, ArrowLeft, ArrowRight];
+input.focus();
 
 const handleInput = (e) => {
-  if (arrow.includes(e.key)) {
-    return;
+  if (e.key === "ArrowDown") {
+    input.blur();
   }
+  if (e.key === "ArrowUp") {
+    input.blur();
+  }
+
   const inputValue = e.target.value;
+
+  if (!inputValue.length) return;
+
   searchLanguages(inputValue);
 };
 
-input.addEventListener("keydown", handleInput);
+input.addEventListener("keyup", handleInput);
 form.addEventListener("submit", (e) => e.preventDefault());
