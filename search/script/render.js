@@ -13,3 +13,14 @@ export const addEvent = (element, eventName, event) => {
 
   return newElement;
 };
+
+export const addToApp = (element) => {
+  const app = document.querySelector(".app");
+
+  return app.appendChild(element);
+};
+
+export const render = (after, before) => {
+  const app = document.querySelector(".app");
+  return app.replaceChildren(after, before);
+};

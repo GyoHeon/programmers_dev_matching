@@ -7,6 +7,7 @@ export const searchLanguages = async (keyword) => {
 
   if (response.ok) {
     const json = await response.json();
+
     return json;
   }
 
