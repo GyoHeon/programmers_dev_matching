@@ -12,15 +12,8 @@ const input = textToElement(`<input
 const suggestion = textToElement(`<div class="Suggestion"></div>`);
 
 const handleInput = async (e) => {
-  if (e.key === "ArrowDown") {
-    input.blur();
-    const len = store.suggestion.length;
-    if (len) index++;
-  }
-  if (e.key === "ArrowUp") {
-    input.blur();
-    const len = store.suggestion.length;
-    if (len) index--;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    return input.blur();
   }
 
   addToApp(suggestion);
@@ -38,7 +31,11 @@ const handleInput = async (e) => {
   suggestion.style =
     store.suggestion.length > 0 ? `display:block` : `display:none`;
 
-  const suggestionElements = makeList(searchResults, true, inputValue);
+  const suggestionElements = makeList({
+    list: searchResults,
+    keyword: inputValue,
+    index: store.selectedIndex,
+  });
   suggestion.replaceChildren(suggestionElements);
 };
 

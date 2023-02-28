@@ -1,5 +1,5 @@
 export const store = {
   selectedLanguage: [],
   suggestion: [],
-  index: 0,
+  selectedIndex: 0,
 };

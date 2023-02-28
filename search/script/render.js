@@ -17,10 +17,14 @@ const highlightKeyword = (raw, keyword) => {
   return raw;
 };
 
-export const makeList = (list, suggestion, keyword) => {
+export const makeList = ({ list, keyword, index = -1 }) => {
   const ul = textToElement("<ul></ul>");
-  list.forEach((element) => {
-    const li = textToElement(`<li>${highlightKeyword(element, keyword)}</li>`);
+  list.forEach((element, idx) => {
+    const li = textToElement(
+      `<li class=${
+        index > -1 && idx === index ? "Suggestion__item--selected" : ""
+      }>${highlightKeyword(element, keyword)}</li>`
+    );
     ul.appendChild(li);
   });
   return ul;
@@ -35,11 +39,10 @@ export const addEvent = (element, eventName, event) => {
 
 export const addToApp = (element) => {
   const app = document.querySelector(".app");
-
   return app.appendChild(element);
 };
 
 export const render = (after) => {
   const app = document.querySelector(".app");
-  return app.replaceChildren(after, before);
+  return app.replaceChildren(after);
 };
