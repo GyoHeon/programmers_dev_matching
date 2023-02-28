@@ -7,6 +7,25 @@ export const textToElement = (text) => {
   return template.content.firstChild;
 };
 
+const highlightKeyword = (raw, keyword) => {
+  if (keyword) {
+    return raw.replace(
+      new RegExp(keyword, "gi"),
+      `<span class="Suggestion__item--matched">${keyword}</span>`
+    );
+  }
+  return raw;
+};
+
+export const makeList = (list, suggestion, keyword) => {
+  const ul = textToElement("<ul></ul>");
+  list.forEach((element) => {
+    const li = textToElement(`<li>${highlightKeyword(element, keyword)}</li>`);
+    ul.appendChild(li);
+  });
+  return ul;
+};
+
 export const addEvent = (element, eventName, event) => {
   const newElement = element;
   newElement.addEventListener(eventName, event);
@@ -20,7 +39,7 @@ export const addToApp = (element) => {
   return app.appendChild(element);
 };
 
-export const render = (after, before) => {
+export const render = (after) => {
   const app = document.querySelector(".app");
   return app.replaceChildren(after, before);
 };

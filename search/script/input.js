@@ -1,5 +1,5 @@
 import { searchLanguages } from "./api.js";
-import { addEvent, addToApp, textToElement } from "./render.js";
+import { addEvent, addToApp, makeList, textToElement } from "./render.js";
 import { store } from "./store.js";
 
 const form = textToElement(`<form class="SearchInput"></form>`);
@@ -14,9 +14,13 @@ const suggestion = textToElement(`<div class="Suggestion"></div>`);
 const handleInput = async (e) => {
   if (e.key === "ArrowDown") {
     input.blur();
+    const len = store.suggestion.length;
+    if (len) index++;
   }
   if (e.key === "ArrowUp") {
     input.blur();
+    const len = store.suggestion.length;
+    if (len) index--;
   }
 
   addToApp(suggestion);
@@ -27,7 +31,6 @@ const handleInput = async (e) => {
     return (store.suggestion = []);
   }
 
-  const suggestionElement = document.querySelector("div.Suggestion");
   const searchResults = await searchLanguages(inputValue);
   if (searchResults) store.suggestion = searchResults;
   else store.suggestion = [];
@@ -35,22 +38,12 @@ const handleInput = async (e) => {
   suggestion.style =
     store.suggestion.length > 0 ? `display:block` : `display:none`;
 
-  const suggestionElements = makeList(searchResults);
-
-  // render(suggestion, beforeSuggestion);
+  const suggestionElements = makeList(searchResults, true, inputValue);
+  suggestion.replaceChildren(suggestionElements);
 };
 
 addEvent(form, "submit", (e) => e.preventDefault());
 addEvent(input, "keyup", handleInput);
 form.appendChild(input);
-
-export const makeList = (list) => {
-  const ul = textToElement("<ul></ul>");
-  list.forEach((element) => {
-    const li = textToElement(`<li>${element}</li>`);
-    ul.appendChild(li);
-  });
-  return ul;
-};
 
 addToApp(form);
