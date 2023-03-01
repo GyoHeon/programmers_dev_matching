@@ -1,5 +1,10 @@
 import { searchLanguages } from "./api.js";
-import { addEvent, addToApp, makeList, textToElement } from "./render.js";
+import {
+  addEvent,
+  addToApp,
+  renderSuggestion,
+  textToElement,
+} from "./render.js";
 import { store } from "./store.js";
 
 const form = textToElement(`<form class="SearchInput"></form>`);
@@ -18,25 +23,20 @@ const handleInput = async (e) => {
 
   addToApp(suggestion);
 
-  const inputValue = e.target.value;
-  if (!inputValue.length) {
+  store.keyword = e.target.value || "";
+  if (!store.keyword.length) {
     suggestion.style = `display:none`;
     return (store.suggestion = []);
   }
 
-  const searchResults = await searchLanguages(inputValue);
+  const searchResults = await searchLanguages(store.keyword);
   if (searchResults) store.suggestion = searchResults;
   else store.suggestion = [];
 
   suggestion.style =
     store.suggestion.length > 0 ? `display:block` : `display:none`;
 
-  const suggestionElements = makeList({
-    list: searchResults,
-    keyword: inputValue,
-    index: store.selectedIndex,
-  });
-  suggestion.replaceChildren(suggestionElements);
+  renderSuggestion();
 };
 
 addEvent(form, "submit", (e) => e.preventDefault());

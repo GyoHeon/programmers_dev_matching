@@ -1,3 +1,5 @@
+import { store } from "./store.js";
+
 //  from: https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
 export const textToElement = (text) => {
   const template = document.createElement("template");
@@ -28,6 +30,16 @@ export const makeList = ({ list, keyword, index = -1 }) => {
     ul.appendChild(li);
   });
   return ul;
+};
+
+export const renderSuggestion = () => {
+  const suggestion = document.querySelector("div.Suggestion");
+  const suggestionElements = makeList({
+    list: store.suggestion,
+    keyword: store.keyword,
+    index: store.selectedIndex,
+  });
+  suggestion.replaceChildren(suggestionElements);
 };
 
 export const addEvent = (element, eventName, event) => {
