@@ -1,9 +1,9 @@
 import { arrow } from "./const.js";
-import { renderSuggestion } from "./render.js";
+import { onSelect } from "./select.js";
 import { store } from "./store.js";
+import { renderSuggestion } from "./suggestion.js";
 
 document.addEventListener("keyup", (e) => {
-  const inputValue = e.target.value;
   if (arrow.includes(e.key)) {
     const len = store.suggestion.length;
     const selectedIndex = store.selectedIndex;
@@ -17,5 +17,10 @@ document.addEventListener("keyup", (e) => {
       else store.selectedIndex = len - 1;
     }
     renderSuggestion(store.keyword);
+  }
+
+  if (e.key === "Enter") {
+    const selected = store.suggestion[store.selectedIndex];
+    onSelect(selected);
   }
 });

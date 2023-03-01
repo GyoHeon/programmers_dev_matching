@@ -1,11 +1,8 @@
 import { searchLanguages } from "./api.js";
-import {
-  addEvent,
-  addToApp,
-  renderSuggestion,
-  textToElement,
-} from "./render.js";
+import { arrow } from "./const.js";
+import { addEvent, addToApp, textToElement } from "./render.js";
 import { store } from "./store.js";
+import { renderSuggestion } from "./suggestion.js";
 
 const form = textToElement(`<form class="SearchInput"></form>`);
 const input = textToElement(`<input 
@@ -14,18 +11,16 @@ const input = textToElement(`<input
                 placeholder="프로그램 언어를 입력하세요." 
                 value="" 
                 autofocus="true"></input>`);
-const suggestion = textToElement(`<div class="Suggestion"></div>`);
 
 const handleInput = async (e) => {
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-    return input.blur();
-  }
-
-  addToApp(suggestion);
+  if (arrow.includes(e.key)) return input.blur();
+  if (e.key === "Enter") return;
 
   store.keyword = e.target.value || "";
+
+  const suggestion = document.querySelector("div.Suggestion");
   if (!store.keyword.length) {
-    suggestion.style = `display:none`;
+    suggestion.style.display = "none";
     return (store.suggestion = []);
   }
 
@@ -33,8 +28,9 @@ const handleInput = async (e) => {
   if (searchResults) store.suggestion = searchResults;
   else store.suggestion = [];
 
-  suggestion.style =
-    store.suggestion.length > 0 ? `display:block` : `display:none`;
+  suggestion.style.display = store.suggestion.length > 0 ? "block" : "none";
+
+  store.selectedIndex = 0;
 
   renderSuggestion();
 };
